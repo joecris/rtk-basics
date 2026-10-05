@@ -1,4 +1,8 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type { Todos, TodosFilter } from "./types/todos";
 // import type { RootState } from "../../store/store";
 import { customAlphabet } from "nanoid";
@@ -118,6 +122,13 @@ export const {
   selectTodosById,
   selectTodosStatus,
 } = todoSlice.selectors;
+
+// Memoized: only recomputes when `todos` or `filter` change.
+export const selectFilteredTodos = createSelector(
+  [selectTodos, selectTodosFilter],
+  (todos, filter) =>
+    filter === "all" ? todos : todos.filter((todo) => todo.status === filter),
+);
 
 // export const selectTodos = (state: RootState) => state.todos.todos;
 // export const selectTodosFilter = (state: RootState) => state.todos.filter;

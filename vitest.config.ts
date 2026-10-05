@@ -10,7 +10,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, "tests/**"],
     coverage: {
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/main.tsx", "src/types/**", "src/test-setup.ts", "src/test-utils.tsx"],
+      exclude: ["src/main.tsx", "src/types/**", "src/test-setup.ts", "src/test-utils.tsx", "src/mocks/**"],
       thresholds: {
         perFile: true,
         lines: 80,

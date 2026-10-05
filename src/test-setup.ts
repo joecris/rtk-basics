@@ -1,6 +1,17 @@
-import { afterEach, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
+import { server } from "./mocks/node";
+
+// Intercept network requests for every test. "error" makes a test fail
+// loudly if a component calls an endpoint no handler covers, instead of
+// silently hanging or hitting the real network.
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+
+// Drop any per-test `server.use(...)` overrides so they can't leak.
+afterEach(() => server.resetHandlers());
+
+afterAll(() => server.close());
 
 afterEach(() => {
   cleanup();

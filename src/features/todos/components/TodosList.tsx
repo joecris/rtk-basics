@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
 import {
-  selectTodos,
+  selectFilteredTodos,
   selectTodosFilter,
   setFilter,
   selectTodosStatus,
@@ -11,7 +11,14 @@ import type { TodosFilter } from "../types/todos";
 import styled from "styled-components";
 import { useEffect } from "react";
 
-const StyledDiv = styled.div`
+// Reset browser list styles so switching to <ul>/<li> keeps the same look.
+const StyledList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const StyledTodoItem = styled.li`
   border: 1px;
   border-radius: 5px;
   box-shadow: 10px 5px 5px #cfcfcf;
@@ -21,7 +28,7 @@ const StyledDiv = styled.div`
 `;
 
 export default function TodosList() {
-  const todos = useAppSelector(selectTodos);
+  const todos = useAppSelector(selectFilteredTodos);
   const filter = useAppSelector(selectTodosFilter);
   const todosStatus = useAppSelector(selectTodosStatus);
 
@@ -47,21 +54,28 @@ export default function TodosList() {
       <div>Todos List</div>
       <div>Current Filter: {filter}</div>
       <div>
-        Set Filter
-        <select value={filter} onChange={handleFilterChange}>
+        <label htmlFor="filter">Set Filter</label>
+        <select
+          value={filter}
+          onChange={handleFilterChange}
+          name="filter"
+          id="filter"
+        >
           <option value="all">All</option>
           <option value="todo">Todo</option>
           <option value="done">Done</option>
         </select>
       </div>
-      {todos.map((item) => (
-        <StyledDiv key={item.id}>
-          <p>
-            {item.id} : {item.name}
-          </p>
-          <p>{item.description}</p>
-        </StyledDiv>
-      ))}
+      <StyledList>
+        {todos.map((item) => (
+          <StyledTodoItem key={item.id}>
+            <p>
+              {item.id} : {item.name}
+            </p>
+            <p>{item.description}</p>
+          </StyledTodoItem>
+        ))}
+      </StyledList>
       <NavLink to="add" end>
         Add Todo
       </NavLink>
